@@ -11,16 +11,18 @@ var userWins = document.getElementById("win-count")
 var userLosses = document.getElementById("loss-count")
 var userGuessesLeft = document.getElementById("guesses-left")
 
-function restartGame() {
-    computerGuess = letters[Math.floor(Math.random() * letters.length)];
-    guessesLeft = 9;
-    guessed = [];
-}
-
 function display() {
     userGuessesLeft.innerHTML = guessesLeft;
     userWins.innerHTML = wins;
     userLosses.innerHTML = losses;
+    userGuesses.innerHTML = guessed;
+}
+
+function restartGame() {
+    computerGuess = letters[Math.floor(Math.random() * letters.length)];
+    guessesLeft = 9;
+    guessed = [];
+    display();
 }
 
 display();
@@ -28,7 +30,7 @@ document.onkeyup = function (event) {
 
     var userGuess = event.key;
 
-    if (letters.indexOf(userGuess) > -1)
+    if (letters.indexOf(userGuess) > -1 && guessed.indexOf(userGuess) === -1)
         if ((userGuess === computerGuess) && (guessesLeft > 0)) {
             wins++;
             userWins.innerHTML = wins;
@@ -40,12 +42,13 @@ document.onkeyup = function (event) {
             userGuessesLeft.innerHTML = guessesLeft;
             guessed.push(userGuess);
             userGuesses.innerHTML = guessed;
+            if (guessesLeft === 0) {
+                losses++;
+                userLosses.innerHTML = losses;
+                restartGame();
+            }
         }
-        else {
-            losses++;
-            userLosses.innerHTML = losses;
-            restartGame();
-        }
+
 }
 
 
